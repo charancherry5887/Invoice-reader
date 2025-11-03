@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice Extractor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0eafc, #cfdef3 70%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 48px auto;
+            background: white;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15), 0 1.5px 8px rgba(0,0,0,0.04);
+            border-radius: 18px;
+            padding: 38px 32px 30px 32px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #444b5a;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            font-size: 1.65rem;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-label {
+            padding: 10px 24px;
+            background: #5e72e4;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: background 0.2s;
+            border: none;
+        }
+
+        .file-label:hover {
+            background: #324cdd;
+        }
+
+        .btn {
+            background: #42c38b;
+            color: white;
+            border-radius: 6px;
+            border: none;
+            padding: 11px 38px;
+            font-size: 1.15rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 20px 0 0 0;
+            box-shadow: 0 2px 5px rgba(66, 195, 139, 0.12);
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #2e9466;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 260px;
+            font-size: 0.98rem;
+            line-height: 2;
+            padding: 13px 16px;
+            border-radius: 10px;
+            border: 1.5px solid #e5e7eb;
+            background: #f5f7fa;
+            color: #343b4a;
+            margin-top: 15px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        .download-link {
+            background: #ffd166;
+            color: #404040;
+            display: inline-block;
+            padding: 9px 23px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 15px;
+            font-weight: 500;
+            transition: background 0.2s;
+            border: none;
+        }
+
+        .download-link:hover {
+            background: #ffb700;
+        }
+
+        .filename {
+            font-size: 1rem;
+            color: #2f3e5c;
+            margin-top: 7px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 22px 8px 18px 8px;
+            }
+            h2 { font-size: 1.1rem; }
+            .btn, .file-label, .download-link { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Invoice Data Extractor</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <label class="file-label">
+            Choose Invoice (PDF, PNG, JPG)
+            <input id="file-input" type="file" name="invoice" accept=".pdf,.jpg,.png,.jpeg" required onchange="updateFileName()" />
+        </label>
+        <span class="filename" id="filename-label"></span>
+        <br>
+        <button type="submit" class="btn">Extract Data</button>
+    </form>
+
+    {% if extracted_json %}
+        <h3 style="color:#5e72e4; margin-top:30px;">Extracted Data (JSON)</h3>
+        <textarea readonly>{{ extracted_json }}</textarea>
+        <br>
+        <a href="{{ download_url }}" class="download-link">Download JSON</a>
+    {% endif %}
+</div>
+<script>
+    function updateFileName() {
+        var input = document.getElementById('file-input');
+        var label = document.getElementById('filename-label');
+        if (input.files && input.files.length > 0) {
+            label.textContent = input.files[0].name;
+        } else {
+            label.textContent = '';
+        }
+    }
+</script>
+</body>
+</html>
